@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: podtools
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: podtools
+  namespace: podtools
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: podtools
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: podtools
+  namespace: podtools
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: podtools
+  namespace: podtools
+spec:
+  serviceAccountName: podtools
+  containers:
+  - name: podtools
+    image: quay.io/retornam/podtools:0.1
+    imagePullPolicy: IfNotPresent
+    stdin: true
+    tty: true
+    env:
+    - name: HOSTIP
+      valueFrom:
+        fieldRef:
+          fieldPath: status.hostIP
+
