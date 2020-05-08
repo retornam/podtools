@@ -19,6 +19,7 @@ RUN apt-get update -yq \
   ca-certificates \
   curl \
   git \
+  jq \
   netcat \
   vim \
   wget \
